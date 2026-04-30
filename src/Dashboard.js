@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
+const BASE_URL = "https://team-manager-backend-production-1391.up.railway.app";
+
 export default function Dashboard({ token }) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch("/api/dashboard", {
+    fetch(`${BASE_URL}/api/dashboard`, {
       headers: {
         Authorization: token,
       },
@@ -33,7 +35,6 @@ export default function Dashboard({ token }) {
       <p>Done: {data.done}</p>
       <p>Overdue: {data.overdue}</p>
 
-      {/* ✅ ADD THIS */}
       <h3>Tasks Per User</h3>
       <ul>
         {Object.entries(data.tasksPerUser || {}).map(([user, count]) => (
