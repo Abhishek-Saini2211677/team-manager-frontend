@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const BASE_URL = "https://team-manager-backend-production-1391.up.railway.app";
+
 export default function Projects({ token }) {
   const [projects, setProjects] = useState([]);
   const [name, setName] = useState("");
@@ -7,21 +9,23 @@ export default function Projects({ token }) {
   const [projectId, setProjectId] = useState("");
   const [userId, setUserId] = useState("");
 
-  const loadProjects = async () => {
-    const res = await fetch("https://team-manager-backend-production-1391.up.railway.app", {
-      headers: { Authorization: token }
-    });
-    const data = await res.json();
-    setProjects(data);
-  };
-
+  // ✅ FIXED useEffect (no warning now)
   useEffect(() => {
+    const loadProjects = async () => {
+      const res = await fetch(`${BASE_URL}/api/projects`, {
+        headers: { Authorization: token }
+      });
+
+      const data = await res.json();
+      setProjects(data);
+    };
+
     loadProjects();
   }, [token]);
 
   // ✅ Create
   const createProject = async () => {
-    await fetch("/api/projects", {
+    await fetch(`${BASE_URL}/api/projects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,12 +35,11 @@ export default function Projects({ token }) {
     });
 
     setName("");
-    loadProjects();
   };
 
   // ✅ Add member
   const addMember = async () => {
-    await fetch("/api/projects/add-member", {
+    await fetch(`${BASE_URL}/api/projects/add-member`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -44,13 +47,11 @@ export default function Projects({ token }) {
       },
       body: JSON.stringify({ projectId, userId })
     });
-
-    loadProjects();
   };
 
   // ✅ Remove member
   const removeMember = async () => {
-    await fetch("/api/projects/remove-member", {
+    await fetch(`${BASE_URL}/api/projects/remove-member`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -58,15 +59,12 @@ export default function Projects({ token }) {
       },
       body: JSON.stringify({ projectId, userId })
     });
-
-    loadProjects();
   };
 
   return (
     <div>
       <h2>Projects</h2>
 
-      {/* Create Project */}
       <input
         placeholder="Project name"
         value={name}
@@ -76,7 +74,6 @@ export default function Projects({ token }) {
 
       <hr />
 
-      {/* Add / Remove member */}
       <input
         placeholder="Project ID"
         onChange={(e) => setProjectId(e.target.value)}
@@ -91,7 +88,6 @@ export default function Projects({ token }) {
 
       <hr />
 
-      {/* List Projects */}
       {projects.map((p) => (
         <div key={p._id}>
           <p>{p.name}</p>

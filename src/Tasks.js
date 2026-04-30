@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const BASE_URL = "https://team-manager-backend-production-1391.up.railway.app";
+
 export default function Tasks({ token }) {
   const [tasks, setTasks] = useState([]);
 
@@ -9,25 +11,26 @@ export default function Tasks({ token }) {
     priority: "Medium",
     assignedTo: "",
     projectId: "",
-    dueDate: ""   // ✅ ADD
+    dueDate: ""
   });
 
-  // 🔹 Load tasks
-  const loadTasks = async () => {
-    const res = await fetch("https://team-manager-backend-production-1391.up.railway.app", {
-      headers: { Authorization: token }
-    });
-    const data = await res.json();
-    setTasks(data);
-  };
-
+  // ✅ FIXED useEffect (no ESLint error now)
   useEffect(() => {
+    const loadTasks = async () => {
+      const res = await fetch(`${BASE_URL}/api/tasks`, {
+        headers: { Authorization: token }
+      });
+
+      const data = await res.json();
+      setTasks(data);
+    };
+
     loadTasks();
   }, [token]);
 
   // 🔹 Create task
   const createTask = async () => {
-    await fetch("/api/tasks", {
+    await fetch(`${BASE_URL}/api/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,13 +47,11 @@ export default function Tasks({ token }) {
       projectId: "",
       dueDate: ""
     });
-
-    loadTasks();
   };
 
   // 🔹 Update status
   const updateStatus = async (id, status) => {
-    await fetch(`/api/tasks/${id}`, {
+    await fetch(`${BASE_URL}/api/tasks/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -58,15 +59,12 @@ export default function Tasks({ token }) {
       },
       body: JSON.stringify({ status })
     });
-
-    loadTasks();
   };
 
   return (
     <div>
       <h2>Tasks</h2>
 
-      {/* Create Task */}
       <input placeholder="Title"
         value={form.title}
         onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -111,7 +109,6 @@ export default function Tasks({ token }) {
 
       <hr />
 
-      {/* Task List */}
       {tasks.map((task) => (
         <div key={task._id}>
           <h4>{task.title}</h4>
