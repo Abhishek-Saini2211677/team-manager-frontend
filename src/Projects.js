@@ -8,7 +8,7 @@ export default function Projects({ token }) {
   const [userId, setUserId] = useState("");
 
   const loadProjects = async () => {
-    const res = await fetch(`${BASE_URL}/api/projects`, {
+    const res = await fetch("https://team-manager-backend-production-1391.up.railway.app", {
       headers: { Authorization: token }
     });
     const data = await res.json();
