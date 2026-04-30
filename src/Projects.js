@@ -8,7 +8,7 @@ export default function Projects({ token }) {
   const [userId, setUserId] = useState("");
 
   const loadProjects = async () => {
-    const res = await fetch("/api/projects", {
+    const res = await fetch(`${BASE_URL}/api/projects`, {
       headers: { Authorization: token }
     });
     const data = await res.json();

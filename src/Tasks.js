@@ -14,7 +14,7 @@ export default function Tasks({ token }) {
 
   // 🔹 Load tasks
   const loadTasks = async () => {
-    const res = await fetch("/api/tasks", {
+    const res = await fetch(`${BASE_URL}/api/projects`, {
       headers: { Authorization: token }
     });
     const data = await res.json();
