@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Tasks from "./Tasks";
@@ -12,21 +13,27 @@ function App() {
 
   return (
     <div>
-      <button onClick={() => setPage("dashboard")}>Dashboard</button>
-      <button onClick={() => setPage("tasks")}>Tasks</button>
-      <button onClick={() => setPage("projects")}>Projects</button>
-      <button onClick={() => {
-        localStorage.removeItem("token");
-        window.location.reload();
-      }}>
-        Logout
-      </button>
+      <div className="navbar">
+        <h1>Team Task Manager</h1>
 
-      <hr />
+        <div className="nav-buttons">
+          <button onClick={() => setPage("dashboard")}>Dashboard</button>
+          <button onClick={() => setPage("tasks")}>Tasks</button>
+          <button onClick={() => setPage("projects")}>Projects</button>
+          <button onClick={() => {
+            localStorage.removeItem("token");
+            window.location.reload();
+          }}>
+            Logout
+          </button>
+        </div>
+      </div>
 
-      {page === "dashboard" && <Dashboard token={token} />}
-      {page === "tasks" && <Tasks token={token} />}
-      {page === "projects" && <Projects token={token} />}
+      <div className="container">
+        {page === "dashboard" && <Dashboard token={token} />}
+        {page === "tasks" && <Tasks token={token} />}
+        {page === "projects" && <Projects token={token} />}
+      </div>
     </div>
   );
 }

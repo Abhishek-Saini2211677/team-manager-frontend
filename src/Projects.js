@@ -5,11 +5,9 @@ const BASE_URL = "https://team-manager-backend-production-1391.up.railway.app";
 export default function Projects({ token }) {
   const [projects, setProjects] = useState([]);
   const [name, setName] = useState("");
-
   const [projectId, setProjectId] = useState("");
   const [userId, setUserId] = useState("");
 
-  // ✅ FIXED useEffect (no warning now)
   useEffect(() => {
     const loadProjects = async () => {
       const res = await fetch(`${BASE_URL}/api/projects`, {
@@ -23,7 +21,6 @@ export default function Projects({ token }) {
     loadProjects();
   }, [token]);
 
-  // ✅ Create
   const createProject = async () => {
     await fetch(`${BASE_URL}/api/projects`, {
       method: "POST",
@@ -37,7 +34,6 @@ export default function Projects({ token }) {
     setName("");
   };
 
-  // ✅ Add member
   const addMember = async () => {
     await fetch(`${BASE_URL}/api/projects/add-member`, {
       method: "PUT",
@@ -49,7 +45,6 @@ export default function Projects({ token }) {
     });
   };
 
-  // ✅ Remove member
   const removeMember = async () => {
     await fetch(`${BASE_URL}/api/projects/remove-member`, {
       method: "PUT",
@@ -63,34 +58,39 @@ export default function Projects({ token }) {
 
   return (
     <div>
-      <h2>Projects</h2>
+      <div className="card">
+        <h2>Create Project</h2>
 
-      <input
-        placeholder="Project name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <button onClick={createProject}>Create</button>
+        <input
+          placeholder="Project name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <hr />
+        <button className="primary" onClick={createProject}>
+          Create
+        </button>
+      </div>
 
-      <input
-        placeholder="Project ID"
-        onChange={(e) => setProjectId(e.target.value)}
-      />
-      <input
-        placeholder="User ID"
-        onChange={(e) => setUserId(e.target.value)}
-      />
+      <div className="card">
+        <h3>Add / Remove Member</h3>
 
-      <button onClick={addMember}>Add Member</button>
-      <button onClick={removeMember}>Remove Member</button>
+        <input
+          placeholder="Project ID"
+          onChange={(e) => setProjectId(e.target.value)}
+        />
+        <input
+          placeholder="User ID"
+          onChange={(e) => setUserId(e.target.value)}
+        />
 
-      <hr />
+        <button onClick={addMember}>Add Member</button>
+        <button onClick={removeMember}>Remove Member</button>
+      </div>
 
       {projects.map((p) => (
-        <div key={p._id}>
-          <p>{p.name}</p>
+        <div className="card" key={p._id}>
+          {p.name}
         </div>
       ))}
     </div>

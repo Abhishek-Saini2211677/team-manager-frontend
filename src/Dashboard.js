@@ -7,42 +7,34 @@ export default function Dashboard({ token }) {
 
   useEffect(() => {
     fetch(`${BASE_URL}/api/dashboard`, {
-      headers: {
-        Authorization: token,
-      },
+      headers: { Authorization: token },
     })
       .then((res) => res.json())
-      .then(setData)
-      .catch((err) => console.error("Dashboard error:", err));
+      .then(setData);
   }, [token]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.reload();
-  };
-
-  if (!data) return <p>Loading...</p>;
+  if (!data) return <p className="container">Loading...</p>;
 
   return (
     <div>
       <h2>Dashboard</h2>
 
-      <button onClick={handleLogout}>Logout</button>
+      <div className="dashboard-grid">
+        <div className="stat-box">Total: {data.total}</div>
+        <div className="stat-box">To Do: {data.todo}</div>
+        <div className="stat-box">In Progress: {data.inProgress}</div>
+        <div className="stat-box">Done: {data.done}</div>
+        <div className="stat-box">Overdue: {data.overdue}</div>
+      </div>
 
-      <p>Total: {data.total}</p>
-      <p>To Do: {data.todo}</p>
-      <p>In Progress: {data.inProgress}</p>
-      <p>Done: {data.done}</p>
-      <p>Overdue: {data.overdue}</p>
-
-      <h3>Tasks Per User</h3>
-      <ul>
-        {Object.entries(data.tasksPerUser || {}).map(([user, count]) => (
-          <li key={user}>
-            {user}: {count}
-          </li>
-        ))}
-      </ul>
+      <div className="card">
+        <h3>Tasks Per User</h3>
+        <ul>
+          {Object.entries(data.tasksPerUser || {}).map(([user, count]) => (
+            <li key={user}>{user}: {count}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
